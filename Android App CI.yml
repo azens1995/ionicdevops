@@ -1,0 +1,87 @@
+# Enable CI builds, trigger a build whenever the master branch receive new modifications 
+trigger: ['master']
+pr: none # Disable PR builds entirely
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+# This task trigger a new build to run, this build is the same as the step above that generates the bundle
+- task: TriggerBuild@3
+  displayName: 'trigger App Build CI'
+  inputs:
+    definitionIsInCurrentTeamProject: true
+    buildDefinition: 'App Build CI'
+    queueBuildForUserThatTriggeredBuild: true
+    ignoreSslCertificateErrors: true
+    useSameSourceVersion: false
+    useCustomSourceVersion: false
+    useSameBranch: true
+    waitForQueuedBuildsToFinish: true
+    waitForQueuedBuildsToFinishRefreshTime: '10'
+    failTaskIfBuildsNotSuccessful: true
+    cancelBuildsIfAnyFails: false
+    treatPartiallySucceededBuildAsSuccessful: false
+    downloadBuildArtifacts: false
+    storeInEnvironmentVariable: true
+    authenticationMethod: 'OAuth Token'
+    password: '$(System.AccessToken)' # Necessary allow permission of Queue builds to <Project> Build Service, See the troubleshooting topic 
+    enableBuildInQueueCondition: false
+    dependentOnSuccessfulBuildCondition: false
+    dependentOnFailedBuildCondition: false
+    checkbuildsoncurrentbranch: false
+    failTaskIfConditionsAreNotFulfilled: false
+
+# Download the artifact of the build triggered above
+- task: DownloadPipelineArtifact@2
+  displayName: 'download artifact App Build CI'
+  inputs:
+    buildType: 'specific'
+    project: 'Ionic App'
+    definition: 'App Build CI'
+    specificBuildWithTriggering: true
+    buildVersionToDownload: 'specific'
+    runId: '$(TriggeredBuildIds)'
+    targetPath: '$(Build.BinariesDirectory)'
+
+# Moves the www folder containing bundle to the Default Working Directory path (e.g. /agent/_work/1/s)
+- bash: |
+      mv $(Build.BinariesDirectory)/www $(System.DefaultWorkingDirectory)
+  displayName: 'mv $(Build.BinariesDirectory)/www $(System.DefaultWorkingDirectory)'
+
+- bash: | # Installing cordova
+    sudo npm i -g cordova
+  displayName: 'npm i -g cordova@latest'
+
+- bash: | # Build android App using cordova
+    npx ionic cordova build android --no-build --release
+  displayName: 'ionic cordova build android --no-build --release'
+
+# Needed to solve missing dependency problem, see the troubleshooting topic
+- bash: |
+    sudo apt-get install lib32z1
+  displayName: 'sudo apt-get install lib32z1'
+
+# Signin the .apk file with the specified keystore
+- task: AndroidSigning@3
+  displayName: 'android signing'
+  inputs:
+    apkFiles: '**/outputs/apk/release/app*.apk'
+    apksignerKeystoreFile: 'sampleapp.keystore'
+# This password is placed in Variables inside the pipeline and the option to keep the value secret is checked.
+    apksignerKeystorePassword: '$(password_keystore)'
+    apksignerKeystoreAlias: 'sampleapp'
+
+- task: CopyFiles@2 # Copies all .apk files to publish
+  displayName: 'copy **/outputs/apk/release/app*.apk to $(Build.BinariesDirectory)'
+  inputs:
+    SourceFolder: '$(System.DefaultWorkingDirectory)'
+    Contents: '**/outputs/apk/release/app*.apk'
+    CleanTargetFolder: true
+    TargetFolder: '$(Build.BinariesDirectory)'
+    flattenFolders: true
+
+
+- publish: '$(Build.BinariesDirectory)' # Publish artifact
+  artifact: 'android-app'
+  displayName: 'publish artifact'
