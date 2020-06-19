@@ -7,30 +7,21 @@ pool:
 
 steps:
 # This task trigger a new build to run, this build is the same as the step above that generates the bundle
-- task: TriggerBuild@3
-  displayName: 'trigger App Build CI'
+- task: Npm@1 # Run npm install
+  displayName: 'npm install'
   inputs:
-    definitionIsInCurrentTeamProject: true
-    buildDefinition: 'App Build CI'
-    queueBuildForUserThatTriggeredBuild: true
-    ignoreSslCertificateErrors: true
-    useSameSourceVersion: false
-    useCustomSourceVersion: false
-    useSameBranch: true
-    waitForQueuedBuildsToFinish: true
-    waitForQueuedBuildsToFinishRefreshTime: '10'
-    failTaskIfBuildsNotSuccessful: true
-    cancelBuildsIfAnyFails: false
-    treatPartiallySucceededBuildAsSuccessful: false
-    downloadBuildArtifacts: false
-    storeInEnvironmentVariable: true
-    authenticationMethod: 'OAuth Token'
-    password: '$(System.AccessToken)' # Necessary allow permission of Queue builds to <Project> Build Service, See the troubleshooting topic 
-    enableBuildInQueueCondition: false
-    dependentOnSuccessfulBuildCondition: false
-    dependentOnFailedBuildCondition: false
-    checkbuildsoncurrentbranch: false
-    failTaskIfConditionsAreNotFulfilled: false
+    command: install
+    workingDir: '$(System.DefaultWorkingDirectory)'
+
+- task: Npm@1 # Run npm run build
+  displayName: 'npm run build'
+  inputs:
+    command: custom
+    customCommand: run build
+
+- publish: 'www/' # Publish App artifact
+  artifact: 'www'
+  displayName: 'Publishing Artifact'
 
 # Download the artifact of the build triggered above
 - task: DownloadPipelineArtifact@2
