@@ -32,28 +32,6 @@ steps:
       command: custom
       customCommand: run build
 
-  - script: | # Run unit tests
-      npx --no-install ng test --watch=false --reporters=progress,junit
-    displayName: 'ng test'
-
-# This task download the chromedriver binary, required for e2e tests
-# In this case I installed a specific version of chromedriver to avoid errors with the version of Chrome in the hosted agent microsoft, see the troubleshooting topic.
-  - script: |
-      node node_modules/.bin/webdriver-manager update --versions.chrome=$(chromeDriverVersion) --gecko false --standalone false
-    displayName: 'changing version of chromedriver to $(chromeDriverVersion)'
-
-
-  - script: | # Run e2e tests without update webdriver
-      npx --no-install ng e2e --webdriverUpdate=false
-    displayName: 'ng e2e tests'
-
-  - task: PublishTestResults@2 # Publish tests results
-    displayName: 'Publishing test results'
-    condition: succeededOrFailed()
-    inputs:
-      testResultsFormat: 'JUnit'
-      testResultsFiles: '**/TESTS-*.xml'
-
   - publish: 'www/' # Publish App artifact
     artifact: 'www'
     displayName: 'Publishing Artifact'
