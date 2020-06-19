@@ -23,11 +23,6 @@ steps:
   artifact: 'www'
   displayName: 'Publishing Artifact'
 
-# Moves the www folder containing bundle to the Default Working Directory path (e.g. /agent/_work/1/s)
-- bash: |
-      mv $(Build.BinariesDirectory)/www $(System.DefaultWorkingDirectory)
-  displayName: 'mv $(Build.BinariesDirectory)/www $(System.DefaultWorkingDirectory)'
-
 - bash: | # Installing cordova
     sudo npm i -g cordova
   displayName: 'npm i -g cordova@latest'
