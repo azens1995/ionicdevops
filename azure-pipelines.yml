@@ -1,0 +1,37 @@
+# Disables CI builds entirely, then commits don't trigger a build
+trigger: none
+
+# Activates pull request trigger, so any pull request to the master trigger a build
+pr:
+- master
+
+# Specifies which pool (Hosted or Self-hosted) to use for this pipeline. 
+# In this case it is in the scope of the pipeline, but you can use it at the stage or job level
+pool:
+  vmImage: 'ubuntu-latest'
+
+# Specific variables to use, in our case it is just one and at the pipeline level 
+variables:
+  chromeDriverVersion: '80.0.3987.106'
+
+# Specifies a linear sequence of operations that make up a job
+# We need only one job, so we can use the simplified structure
+steps:
+# Tasks are the building blocks of a pipeline
+# We can choose from a catalog of tasks available by default or download from the Azure DevOps marketplace 
+# In this case I chose to use 6 tasks (not mandatory) to install dependencies and build the App. 
+  - task: Npm@1 # Run npm install
+    displayName: 'npm install'
+    inputs:
+      command: install
+      workingDir: '$(System.DefaultWorkingDirectory)'
+
+  - task: Npm@1 # Run npm run build
+    displayName: 'npm run build'
+    inputs:
+      command: custom
+      customCommand: run build
+
+  - publish: 'www/' # Publish App artifact
+    artifact: 'www'
+    displayName: 'Publishing Artifact'

@@ -1,0 +1,61 @@
+# Enable CI builds, trigger a build whenever the master branch receive new modifications 
+trigger: ['master']
+pr: none # Disable PR builds entirely
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+# This task trigger a new build to run, this build is the same as the step above that generates the bundle
+- task: Npm@1 # Run npm install
+  displayName: 'npm install'
+  inputs:
+    command: install
+    workingDir: '$(System.DefaultWorkingDirectory)'
+
+- task: Npm@1 # Run npm run build
+  displayName: 'npm run build'
+  inputs:
+    command: custom
+    customCommand: run build
+
+- publish: 'www/' # Publish App artifact
+  artifact: 'www'
+  displayName: 'Publishing Artifact'
+
+- bash: | # Installing cordova
+    sudo npm i -g cordova
+  displayName: 'npm i -g cordova@latest'
+
+- bash: | # Build android App using cordova
+    npx ionic cordova build android --no-build --release
+  displayName: 'ionic cordova build android --no-build --release'
+
+# Needed to solve missing dependency problem, see the troubleshooting topic
+- bash: |
+    sudo apt-get install lib32z1
+  displayName: 'sudo apt-get install lib32z1'
+
+# Signin the .apk file with the specified keystore
+- task: AndroidSigning@3
+  displayName: 'android signing'
+  inputs:
+    apkFiles: '**/outputs/apk/release/app*.apk'
+    apksignerKeystoreFile: 'sampleapp.keystore'
+# This password is placed in Variables inside the pipeline and the option to keep the value secret is checked.
+    apksignerKeystorePassword: '$(password_keystore)'
+    apksignerKeystoreAlias: 'sampleapp'
+
+- task: CopyFiles@2 # Copies all .apk files to publish
+  displayName: 'copy **/outputs/apk/release/app*.apk to $(Build.BinariesDirectory)'
+  inputs:
+    SourceFolder: '$(System.DefaultWorkingDirectory)'
+    Contents: '**/outputs/apk/release/app*.apk'
+    CleanTargetFolder: true
+    TargetFolder: '$(Build.BinariesDirectory)'
+    flattenFolders: true
+
+
+- publish: '$(Build.BinariesDirectory)' # Publish artifact
+  artifact: 'android-app'
+  displayName: 'publish artifact'
