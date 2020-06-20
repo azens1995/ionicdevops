@@ -32,6 +32,7 @@ async function build(platform, env, isRelease = true){
     }else {
         await execSync(`ionic cordova build ${platform} --configuration=${env} --verbose`)
     }
+    console.log('Sample release');
     
     console.log(`Sucessfully finished build for ${platform} :)`);
 }
