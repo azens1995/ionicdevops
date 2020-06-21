@@ -33,6 +33,9 @@ steps:
     sudo npm i -g cordova
   displayName: 'npm i -g cordova@latest'
   
+- bash: | # Install gulp cli
+    sudo npm i gulp-cli
+  displayName: 'npm i -g gulp-cli'
 - task: gulp@1
   inputs:
     gulpFile: ''
