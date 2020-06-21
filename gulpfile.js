@@ -11,18 +11,18 @@ gulp.task('prod-android', async function() {
 
 async function addRemovePlatform(platform) {
     console.log(`Check if ${platform} platform already exists.....`);
-    // await execSync(`yes | ionic cordova prepare ${platform}`);
-    const platformPath = path.join(cordova.findProjectRoot(), 'platforms', platform);
-    console.log(`The file path created is ${platformPath}`);
-    const exists = fs.existsSync(platformPath);
-    if(exists){
-        console.log(`${platform} platform already exists, remove ${platform} platfrom....`);
-        await cordova.platform('remove', platform);
-        console.log(`${platform} platform successfully removed....`);
-    }
+    await execSync(`yes | ionic cordova prepare ${platform}`);
+    // const platformPath = path.join(cordova.findProjectRoot(), 'platforms', platform);
+    // console.log(`The file path created is ${platformPath}`);
+    // const exists = fs.existsSync(platformPath);
+    // if(exists){
+    //     console.log(`${platform} platform already exists, remove ${platform} platfrom....`);
+    //     await cordova.platform('remove', platform);
+    //     console.log(`${platform} platform successfully removed....`);
+    // }
     
-    console.log(`Add ${platform} platform with the new config.xml...`);
-    await cordova.platform('add', platform);
+    // console.log(`Add ${platform} platform with the new config.xml...`);
+    // await cordova.platform('add', platform);
     console.log(`Add ${platform} platform with the new config.xml successfully added....`);
 
 }
