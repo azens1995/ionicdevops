@@ -38,8 +38,7 @@ steps:
   displayName: 'npm i -g gulp-cli'
 - task: gulp@1
   inputs:
-    gulpFile: ''
-    targets: 'prod-android'
+    targets: prod-android
     gulpjs: '$(System.DefaultWorkingDirectory)/gulpfile.js'
   displayName: 'Run gulp task'
     
