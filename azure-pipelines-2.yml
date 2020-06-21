@@ -36,6 +36,10 @@ steps:
 - bash: | # Install gulp cli
     sudo npm i -g gulp-cli
   displayName: 'npm i -g gulp-cli'
+
+- bash: | # Install ionic cli
+    sudo npm install -g @ionic/cli
+  displayName: 'npm i -g @ionic/cli'
 - task: gulp@1
   inputs:
     targets: prod-android
