@@ -28,9 +28,9 @@ async function addRemovePlatform(platform) {
 async function build(platform, env, isRelease = true){
     console.log(`Start build for ${platform}......`);
     if(isRelease){
-        await execSync(`ionic cordova build ${platform} --release --configuration=${env} --verbose`,  {stdio: 'inherit'});
+        await execSync(`ionic cordova build ${platform} --release --verbose`,  {stdio: 'inherit'});
     }else {
-        await execSync(`ionic cordova build ${platform} --configuration=${env} --verbose`)
+        await execSync(`ionic cordova build ${platform} --verbose`)
     }
     console.log('Sample release');
     
