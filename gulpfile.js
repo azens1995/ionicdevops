@@ -11,8 +11,7 @@ gulp.task('prod-android', async function() {
 
 async function addRemovePlatform(platform) {
     console.log(`Check if ${platform} platform already exists.....`);
-    console.log(cordova.findProjectRoot());
-    console.log(`The project root is ${cordova.findProjectRoot()}`);
+    await cordova.platform('prepare', platform);
     const platformPath = path.join(cordova.findProjectRoot(), 'platforms', platform);
     console.log(`The file path created is ${platformPath}`);
     const exists = fs.existsSync(platformPath);
