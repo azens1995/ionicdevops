@@ -35,8 +35,9 @@ steps:
 
 - task: gulp@1
   inputs:
-    targets: prod-android
-  displayName: 'Run gulp'
+    gulpFile: '$(System.DefaultWorkingDirectory)/gulpfile.js'
+    targets: 'prod-android'
+  displayName: 'Run gulp task'
     
 
 # Needed to solve missing dependency problem, see the troubleshooting topic
