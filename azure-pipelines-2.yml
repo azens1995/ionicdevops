@@ -1,0 +1,44 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+pool:
+  vmImage: 'macOS-latest'
+
+steps:
+# This task trigger a new build to run, this build is the same as the step above that generates the bundle
+- task: Npm@1 # Run npm install
+  displayName: 'npm install'
+  inputs:
+    command: install
+    workingDir: '$(System.DefaultWorkingDirectory)'
+
+# - task: Npm@1 # Run npm run build
+#   displayName: 'npm run build'
+#   inputs:
+#     command: custom
+#     customCommand: run build
+
+# - publish: 'www/' # Publish App artifact
+#   artifact: 'www'
+#   displayName: 'Publishing Artifact'
+
+- bash: | # Installing cordova
+    sudo npm i -g cordova
+  displayName: 'npm i -g cordova@latest'
+
+- task: gulp@1
+  inputs:
+    targets: prod-android
+    gulpjs: 'gulp.js'
+  displayName: 'Run gulp'
+    
+
+# Needed to solve missing dependency problem, see the troubleshooting topic
+- bash: | # Running gulp to create the apk
+    gulp prod-android
+  displayName: 'Execute gulp prod-android'
