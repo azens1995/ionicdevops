@@ -17,14 +17,15 @@ steps:
     command: install
     workingDir: '$(System.DefaultWorkingDirectory)'
 - task: Npm@1 # Run npm run build
-    displayName: 'npm run build'
-    inputs:
-      command: custom
-      customCommand: run build
+  displayName: 'npm run build'
+  inputs:
+    command: custom
+    customCommand: run build
 
-  - publish: 'www/' # Publish App artifact
-    artifact: 'www'
-    displayName: 'Publishing Artifact'
+- publish: 'www/' # Publish App artifact
+  artifact: 'www'
+  displayName: 'Publishing Artifact'
+
 - bash: | # List files in directory
     ls -la
 
