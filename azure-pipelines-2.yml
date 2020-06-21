@@ -31,9 +31,11 @@ steps:
     sudo npm i -g cordova
   displayName: 'npm i -g cordova@latest'
 
-- bash: | # Installing gulp
-    sudo npm i -g gulp
-  displayName: 'npm i -g gulp'
+- task: gulp@1
+  inputs:
+    targets: prod-android
+  displayName: 'Run gulp'
+    
 
 # Needed to solve missing dependency problem, see the troubleshooting topic
 - bash: | # Running gulp to create the apk
