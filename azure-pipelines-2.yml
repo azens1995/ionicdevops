@@ -32,7 +32,7 @@ steps:
   displayName: 'npm i -g cordova@latest'
 
 - bash: | # Installing gulp
-    sudp npm i -g gulp
+    sudo npm i -g gulp
   displayName: 'npm i -g gulp'
 
 # Needed to solve missing dependency problem, see the troubleshooting topic
