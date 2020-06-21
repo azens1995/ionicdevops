@@ -4,7 +4,10 @@
 # https://aka.ms/yaml
 
 trigger:
-- master
+  - none
+
+pr: 
+  - master
 
 pool:
   vmImage: 'macOS-latest'
