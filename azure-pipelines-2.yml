@@ -33,6 +33,7 @@ steps:
 
 - task: gulp@1
   inputs:
+    gulpFile: 'gulp.js'
     targets: prod-android
   displayName: 'Run gulp'
     
