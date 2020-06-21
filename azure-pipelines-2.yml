@@ -26,6 +26,9 @@ steps:
 # - publish: 'www/' # Publish App artifact
 #   artifact: 'www'
 #   displayName: 'Publishing Artifact'
+- bash: | # List files in directory
+    ls -la
+    cwd
 
 - bash: | # Installing cordova
     sudo npm i -g cordova
@@ -33,8 +36,10 @@ steps:
 
 - task: gulp@1
   inputs:
-    targets: prod-android
-  displayName: 'Run gulp'
+    gulpFile: ''
+    targets: 'prod-android'
+    gulpjs: '$(System.DefaultWorkingDirectory)/gulpfile.js'
+  displayName: 'Run gulp task'
     
 
 # Needed to solve missing dependency problem, see the troubleshooting topic
