@@ -1,0 +1,44 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+# This task trigger a new build to run, this build is the same as the step above that generates the bundle
+- task: Npm@1 # Run npm install
+  displayName: 'npm install'
+  inputs:
+    command: install
+    workingDir: '$(System.DefaultWorkingDirectory)'
+
+- bash: | # List files in directory
+    ls -la
+
+- bash: | # Installing cordova
+    sudo npm i -g cordova
+  displayName: 'npm i -g cordova@latest'
+  
+- bash: | # Install gulp cli
+    sudo npm i -g gulp-cli
+  displayName: 'npm i -g gulp-cli'
+
+- bash: | # Install ionic cli
+    sudo npm install -g @ionic/cli
+  displayName: 'npm i -g @ionic/cli'
+- task: gulp@1
+  inputs:
+    targets: prod-android
+    gulpjs: '$(System.DefaultWorkingDirectory)/gulpfile.js'
+  displayName: 'Run gulp task'
+    
+
+# Needed to solve missing dependency problem, see the troubleshooting topic
+- bash: | # Running gulp to create the apk
+    gulp prod-android
+  displayName: 'Execute gulp prod-android'
