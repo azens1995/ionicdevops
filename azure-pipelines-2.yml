@@ -34,7 +34,6 @@ steps:
 - task: gulp@1
   inputs:
     targets: prod-android
-    gulpjs: 'gulp.js'
   displayName: 'Run gulp'
     
 
