@@ -23,10 +23,6 @@ steps:
 - bash: | # Installing cordova
     sudo npm i -g cordova
   displayName: 'npm i -g cordova@latest'
-  
-- bash: | # Install gulp cli
-    sudo npm i -g gulp-cli
-  displayName: 'npm i -g gulp-cli'
 
 - bash: | # Install ionic cli
     sudo npm install -g @ionic/cli
