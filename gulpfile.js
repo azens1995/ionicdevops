@@ -68,7 +68,7 @@ async function align(env){
     console.log(`The list of build tools versions are `);
     console.log(buildToolVersions);
     buildToolVersions.map(version => console.log(`The build tools version is -> ${version}`));
-    const buildToolVersionToUse = buildToolVersions.length > 1 ? buildToolVersions[buildToolVersions.length - 1] : buildToolVersions[0];
+    const buildToolVersionToUse = buildToolVersions[buildToolVersions.length - 1];
     
     console.log(`Using android sdk version ${buildToolVersionToUse}...`);
     const androidHomePath = execSync('echo $ANDROID_HOME',  {encoding: 'utf8', maxBuffer: 50 * 1024 * 1024 }).toString().split('\n')[0];
