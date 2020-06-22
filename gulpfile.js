@@ -65,6 +65,9 @@ async function align(env){
     }
     
     const buildToolVersions = buildToolVersionString.split('\n');
+    console.log(`The list of build tools versions are `);
+    console.log(buildToolVersions);
+    buildToolVersions.map(version => console.log(`The build tools version is -> ${version}`));
     const buildToolVersionToUse = buildToolVersions[0];
     
     console.log(`Using android sdk version ${buildToolVersionToUse}...`);
