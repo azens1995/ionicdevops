@@ -14,6 +14,14 @@ gulp.task('prod-android', async function() {
     }, 5000);
 });
 
+gulp.task('prod-ios', async function() {
+    await addRemovePlatform('ios');
+    return setTimeout(async function () {
+        await build('ios', 'prod', true);
+        return;
+    }, 5000);
+});
+
 async function addRemovePlatform(platform) {
     console.log(`Check if ${platform} platform already exists.....`);
     const platformPath = path.join(cordova.findProjectRoot(), 'platforms', platform);
