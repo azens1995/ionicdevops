@@ -36,14 +36,32 @@ steps:
 - bash: | # Install ionic cli
     sudo npm install -g @ionic/cli
   displayName: 'npm i -g @ionic/cli'
+
+# Needed to solve missing dependency problem, see the troubleshooting topic
+- bash: |
+    sudo apt-get install lib32z1
+  displayName: 'sudo apt-get install lib32z1'
 - task: gulp@1
   inputs:
     targets: prod-android
     gulpjs: '$(System.DefaultWorkingDirectory)/gulpfile.js'
   displayName: 'Run gulp task'
     
-
-# Needed to solve missing dependency problem, see the troubleshooting topic
 - bash: | # Running gulp to create the apk
     gulp prod-android
   displayName: 'Execute gulp prod-android'
+
+- task: CopyFiles@2 # Copies all .apk files to publish
+  displayName: 'copy tribute-prod.apk to $(Build.BinariesDirectory)'
+  inputs:
+    SourceFolder: '$(System.DefaultWorkingDirectory)'
+    Contents: 'tribute-prod.apk'
+    CleanTargetFolder: true
+    TargetFolder: '$(Build.BinariesDirectory)'
+    flattenFolders: true
+
+
+- publish: '$(Build.BinariesDirectory)' # Publish artifact
+  artifact: 'android-app'
+  displayName: 'publish artifact'
+
