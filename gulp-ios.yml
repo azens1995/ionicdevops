@@ -61,7 +61,6 @@ steps:
   inputs:
     actions: 'build'
     sdk: 'iphoneos'
-    xcWorkspacePath: '**/*.xcodeproj/project.xcworkspace'
     packageApp: true
     useXcpretty: false
     signingOption: 'manual'
