@@ -38,11 +38,33 @@ steps:
     targets: prod-ios
     gulpjs: '$(System.DefaultWorkingDirectory)/gulpfile.js'
   displayName: 'Run gulp task'
-
-- bash: | # List all the files in the project Directory
-    ls -la
-  displayName: 'ls -la'
     
 - bash: | # Running gulp to create the apk
     gulp prod-ios
   displayName: 'Execute gulp prod-android'
+
+- bash: | # List all the files in the project Directory
+    ls -la
+  displayName: 'ls -la'
+
+- task: Xcode@5
+  inputs:
+    actions: 'build'
+    sdk: 'iphoneos'
+    xcWorkspacePath: '$(System.DefaultWorkingDirectory)/platforms/ios/Tribute.xcworkspace'
+    scheme: 'test'
+    packageApp: true
+    useXcpretty: false
+    args: '-archivePath $(agent.buildDirectory)/HelloiOS'
+
+- task: ArchiveFiles@2
+  displayName: 'Package .xcarchive into a zip file'
+  inputs:
+    rootFolderOrFile: '$(agent.buildDirectory)/HelloiOS.xcarchive/'
+    archiveFile: '$(build.artifactStagingDirectory)/HelloiOS.xcarchive.zip'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathToPublish: '$(build.artifactStagingDirectory)/HelloiOS.xcarchive.zip'
+    artifactName: 'xcarchive-files'
+    artifactType: 'container'
