@@ -29,6 +29,10 @@ steps:
     sudo npm install -g @ionic/cli
   displayName: 'npm i -g @ionic/cli'
 
+- bash: | # Install Gulp CLI
+    sudo npm install --global gulp-cli
+  displayName: 'npm install --global gulp-cli'
+
 - task: gulp@1
   inputs:
     targets: prod-ios
