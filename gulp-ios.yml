@@ -63,6 +63,8 @@ steps:
     useXcpretty: false
     scheme: ''
     signingOption: 'manual'
+    signingIdentity: '$(APPLE_CERTIFICATE_SIGNING_IDENTITY)'
+    provisioningProfileUuid: '$(APPLE_PROV_PROFILE_UUID)'
     xcWorkspacePath: '$(System.DefaultWorkingDirectory)/platforms/ios/*.xcodeproj'
     exportPath: '$(agent.buildDirectory)/output/$(sdk)/$(configuration)'
     
