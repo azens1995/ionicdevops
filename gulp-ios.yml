@@ -54,7 +54,7 @@ steps:
 
 - task: InstallAppleProvisioningProfile@1
   inputs:
-    provProfileSecureFile: '39129125-d5f6-45e1-8ff6-90c3a77ac19a.mobileprovision'
+    provProfileSecureFile: '0035d0c3-1cc6-402b-bacf-255bf7d8cf4b.mobileprovision'
 - task: Xcode@5
   inputs:
     actions: 'build'
