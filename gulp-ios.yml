@@ -51,7 +51,7 @@ steps:
   inputs:
     actions: 'build'
     sdk: 'iphoneos'
-    xcWorkspacePath: '$(System.DefaultWorkingDirectory)/platforms/ios/Tribute.xcworkspace'
+    xcWorkspacePath: '**/*.xcodeproj/project.xcworkspace'
     scheme: 'test'
     packageApp: true
     useXcpretty: false
