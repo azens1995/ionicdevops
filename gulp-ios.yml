@@ -49,7 +49,7 @@ steps:
 
 - task: InstallAppleCertificate@2
   inputs:
-    certSecureFile: 'sampple_certificate.p12'
+    certSecureFile: 'Certificates_sample.p12'
     certPwd: 'B#0k3nL@g'
     keychain: 'temp'
 
