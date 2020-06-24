@@ -52,19 +52,19 @@ steps:
     actions: 'build'
     sdk: 'iphoneos'
     xcWorkspacePath: '**/*.xcodeproj/project.xcworkspace'
-    scheme: 'test'
+    scheme: 'ionicDevops'
     packageApp: true
     useXcpretty: false
-    args: '-archivePath $(agent.buildDirectory)/HelloiOS'
+    args: '-archivePath $(agent.buildDirectory)/ionicDevops'
 
 - task: ArchiveFiles@2
   displayName: 'Package .xcarchive into a zip file'
   inputs:
-    rootFolderOrFile: '$(agent.buildDirectory)/HelloiOS.xcarchive/'
-    archiveFile: '$(build.artifactStagingDirectory)/HelloiOS.xcarchive.zip'
+    rootFolderOrFile: '$(agent.buildDirectory)/ionicDevops.xcarchive/'
+    archiveFile: '$(build.artifactStagingDirectory)/ionicDevops.xcarchive.zip'
 
 - task: PublishBuildArtifacts@1
   inputs:
-    pathToPublish: '$(build.artifactStagingDirectory)/HelloiOS.xcarchive.zip'
+    pathToPublish: '$(build.artifactStagingDirectory)/ionicDevops.xcarchive.zip'
     artifactName: 'xcarchive-files'
     artifactType: 'container'
