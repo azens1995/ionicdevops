@@ -47,16 +47,6 @@ steps:
     ls -la
   displayName: 'ls -la'
 
-- task: InstallAppleCertificate@2
-  inputs:
-    certSecureFile: 'Certificates_sample.p12'
-    certPwd: 'B#0k3nL@g'
-    keychain: 'temp'
-
-- task: InstallAppleProvisioningProfile@1
-  inputs:
-    provisioningProfileLocation: 'secureFiles'
-    provProfileSecureFile: 'Tribute_App_Store_Provisioning_Profile_26112019.mobileprovision'
 - task: Xcode@5
   inputs:
     actions: 'build'
@@ -65,8 +55,6 @@ steps:
     useXcpretty: false
     scheme: ''
     signingOption: 'manual'
-    signingIdentity: '$(APPLE_CERTIFICATE_SIGNING_IDENTITY)'
-    provisioningProfileUuid: '$(APPLE_PROV_PROFILE_UUID)'
     xcWorkspacePath: '$(System.DefaultWorkingDirectory)/platforms/ios/*.xcodeproj'
     exportPath: '$(agent.buildDirectory)/output/$(sdk)/$(configuration)'
     
