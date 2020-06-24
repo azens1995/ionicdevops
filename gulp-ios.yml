@@ -55,7 +55,6 @@ steps:
     packageApp: true
     useXcpretty: false
     scheme: 'CordovaLib'
-    args: '-archivePath $(agent.buildDirectory)/ionicDevops'
 
 - task: ArchiveFiles@2
   displayName: 'Package .xcarchive into a zip file'
