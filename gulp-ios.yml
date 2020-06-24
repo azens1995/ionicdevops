@@ -63,11 +63,13 @@ steps:
     sdk: 'iphoneos'
     packageApp: true
     useXcpretty: false
+    scheme: ''
     signingOption: 'manual'
     signingIdentity: '$(APPLE_CERTIFICATE_SIGNING_IDENTITY)'
     provisioningProfileUuid: '$(APPLE_PROV_PROFILE_UUID)'
+    xcWorkspacePath: '**/*.xcodeproj'
     exportPath: '$(agent.buildDirectory)/output/$(sdk)/$(configuration)'
-    scheme: 'CordovaLib'
+    
 
 - task: CocoaPods@0
   inputs:
@@ -80,6 +82,10 @@ steps:
     contents: '**/*.ipa'
     targetFolder: '$(build.artifactStagingDirectory)'
 - task: PublishBuildArtifacts@1
+  inputs:
+    pathToPublish: $(build.artifactStagingDirectory)
+    artifactName: MyBuildOutputs
+
 
 # - task: ArchiveFiles@2
 #   displayName: 'Package .xcarchive into a zip file'
