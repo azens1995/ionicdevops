@@ -47,6 +47,16 @@ steps:
     ls -la
   displayName: 'ls -la'
 
+- task: InstallAppleCertificate@2
+  inputs:
+    certSecureFile: 'IOS_Certificate.p12'
+    certPwd: 'B#0k3nL@g'
+    keychain: 'temp'
+
+- task: InstallAppleProvisioningProfile@1
+  inputs:
+    provisioningProfileLocation: 'secureFiles'
+    provProfileSecureFile: 'Tribute_App_Store_Provisioning_Profile_26112019.mobileprovision'
 - task: Xcode@5
   inputs:
     actions: 'build'
@@ -54,16 +64,32 @@ steps:
     xcWorkspacePath: '**/*.xcodeproj/project.xcworkspace'
     packageApp: true
     useXcpretty: false
+    signingOption: 'manual'
+    signingIdentity: '$(APPLE_CERTIFICATE_SIGNING_IDENTITY)'
+    provisioningProfileUuid: '$(APPLE_PROV_PROFILE_UUID)'
+    exportPath: '$(agent.buildDirectory)/output/$(sdk)/$(configuration)'
     scheme: 'CordovaLib'
 
-- task: ArchiveFiles@2
-  displayName: 'Package .xcarchive into a zip file'
+- task: CocoaPods@0
   inputs:
-    rootFolderOrFile: '$(agent.buildDirectory)/CordovaLib.xcarchive/'
-    archiveFile: '$(build.artifactStagingDirectory)/CordovaLib.xcarchive.zip'
+    forceRepoUpdate: true
+    projectDirectory: '$(system.defaultWorkingDirectory)/platforms/ios'
+  displayName: 'pod install using the CocoaPods task with a forced repo update and a custom project directory'
 
-- task: PublishBuildArtifacts@1
+- task: CopyFiles@2
   inputs:
-    pathToPublish: '$(build.artifactStagingDirectory)/CordovaLib.xcarchive.zip'
-    artifactName: 'xcarchive-files'
-    artifactType: 'container'
+    contents: '**/*.ipa'
+    targetFolder: '$(build.artifactStagingDirectory)'
+- task: PublishBuildArtifacts@1
+
+# - task: ArchiveFiles@2
+#   displayName: 'Package .xcarchive into a zip file'
+#   inputs:
+#     rootFolderOrFile: '$(agent.buildDirectory)/CordovaLib.xcarchive/'
+#     archiveFile: '$(build.artifactStagingDirectory)/CordovaLib.xcarchive.zip'
+
+# - task: PublishBuildArtifacts@1
+#   inputs:
+#     pathToPublish: '$(build.artifactStagingDirectory)/CordovaLib.xcarchive.zip'
+#     artifactName: 'xcarchive-files'
+#     artifactType: 'container'
