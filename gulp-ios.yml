@@ -29,15 +29,15 @@ steps:
     sudo npm install -g @ionic/cli
   displayName: 'npm i -g @ionic/cli'
 
-# Needed to solve missing dependency problem, see the troubleshooting topic
-- bash: |
-    sudo apt-get install lib32z1
-  displayName: 'sudo apt-get install lib32z1'
 - task: gulp@1
   inputs:
     targets: prod-ios
     gulpjs: '$(System.DefaultWorkingDirectory)/gulpfile.js'
   displayName: 'Run gulp task'
+
+- bash: | # List all the files in the project Directory
+    ls -la
+  displayName: 'ls -la'
     
 - bash: | # Running gulp to create the apk
     gulp prod-ios
