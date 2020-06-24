@@ -47,6 +47,14 @@ steps:
     ls -la
   displayName: 'ls -la'
 
+- task: InstallAppleCertificate@2
+  inputs:
+    certSecureFile: 'Certificates_sample.p12'
+    certPwd: $(P12Password)
+
+- task: InstallAppleProvisioningProfile@1
+  inputs:
+    provProfileSecureFile: '39129125-d5f6-45e1-8ff6-90c3a77ac19a.mobileprovision'
 - task: Xcode@5
   inputs:
     actions: 'build'
