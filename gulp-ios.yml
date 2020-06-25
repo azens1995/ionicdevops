@@ -62,7 +62,8 @@ steps:
     sudo gem install cocoapods
   displayName: 'sudo gem install cocoapods'
 
-- script: cd $(system.defaultWorkingDirectory)/platforms/ios | /usr/local/bin/pod install
+- script: pod install
+  workingDirectory: '$(system.defaultWorkingDirectory)/platforms/ios'
   displayName: 'pod install using a script'
 # - task: CocoaPods@0
 #   inputs:
