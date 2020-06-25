@@ -72,8 +72,8 @@ steps:
     useXcpretty: false
     configuration: '$(configuration)'
     scheme: 'ionicDevops'
-    signingOption: 'auto'
-    signingIdentity: '$(APPLE_CERTIFICATE_SIGNING_IDENTITY)'
+    teamId: '$(TeamId)'
+    signingOption: 'nosign'
     xcWorkspacePath: '$(System.DefaultWorkingDirectory)/platforms/ios/*.xcodeproj'
     exportPath: '$(agent.buildDirectory)/output/$(sdk)/$(configuration)'
 
