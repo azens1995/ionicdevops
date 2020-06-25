@@ -57,6 +57,9 @@ steps:
   inputs:
     provProfileSecureFile: 'Tribute_Beta_Profile.mobileprovision'
     removeProfile: true
+- bash: | # Install cocopad
+    sudo gem install cocoapods
+  displayName: 'sudo gem install cocoapods'
 
 - script: /usr/local/bin/pod install
   displayName: 'pod install using a script'
