@@ -49,7 +49,7 @@ steps:
 
 - task: InstallAppleCertificate@2
   inputs:
-    certSecureFile: 'Latest_Certificates.p12'
+    certSecureFile: 'Certificates_Beta.p12'
     certPwd: $(P12Password)
     deleteCert: true  
 
@@ -72,7 +72,6 @@ steps:
     useXcpretty: false
     configuration: '$(configuration)'
     scheme: 'ionicDevops'
-    teamId: '$(TeamId)'
     signingOption: 'manual'
     signingIdentity: '$(APPLE_CERTIFICATE_SIGNING_IDENTITY)'
     provisioningProfileUuid: '$(APPLE_PROV_PROFILE_UUID)'
