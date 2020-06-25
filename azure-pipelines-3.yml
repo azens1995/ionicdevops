@@ -80,6 +80,7 @@ steps:
 
 - task: CopyFiles@2
   inputs:
+    SourceFolder: '$(agent.buildDirectory)/output/$(sdk)/$(configuration)'
     contents: '**/*.ipa'
     targetFolder: '$(build.artifactStagingDirectory)'
 - task: PublishBuildArtifacts@1
