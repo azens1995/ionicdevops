@@ -58,6 +58,8 @@ steps:
     provProfileSecureFile: 'Tribute_Beta_Profile.mobileprovision'
     removeProfile: true
 
+- script: /usr/local/bin/pod install
+  displayName: 'pod install using a script'
 # - task: CocoaPods@0
 #   inputs:
 #     forceRepoUpdate: true
