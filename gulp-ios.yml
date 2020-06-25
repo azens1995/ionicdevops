@@ -71,7 +71,7 @@ steps:
     packageApp: true
     useXcpretty: false
     configuration: '$(configuration)'
-    scheme: 'ionicDevops'
+    scheme: ''
     signingOption: 'manual'
     signingIdentity: '$(APPLE_CERTIFICATE_SIGNING_IDENTITY)'
     provisioningProfileUuid: '$(APPLE_PROV_PROFILE_UUID)'
