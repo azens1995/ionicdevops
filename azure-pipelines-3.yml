@@ -1,0 +1,101 @@
+trigger:
+- master
+
+pool:
+  vmImage: 'macos-latest'
+
+steps:
+# This task trigger a new build to run, this build is the same as the step above that generates the bundle
+- task: Npm@1 # Run npm install
+  displayName: 'npm install'
+  inputs:
+    command: install
+    workingDir: '$(System.DefaultWorkingDirectory)'
+- task: Npm@1 # Run npm run build
+  displayName: 'npm run build'
+  inputs:
+    command: custom
+    customCommand: run build
+
+- publish: 'www/' # Publish App artifact
+  artifact: 'www'
+  displayName: 'Publishing Artifact'
+
+- bash: | # Installing cordova
+    sudo npm i -g cordova
+  displayName: 'npm i -g cordova@latest'
+
+- bash: | # Install ionic cli
+    sudo npm install -g @ionic/cli
+  displayName: 'npm i -g @ionic/cli'
+
+- bash: | # Install Gulp CLI
+    sudo npm install --global gulp-cli
+  displayName: 'npm install --global gulp-cli'
+
+- task: gulp@1
+  inputs:
+    targets: prod-ios
+    gulpjs: '$(System.DefaultWorkingDirectory)/gulpfile.js'
+  displayName: 'Run gulp task'
+    
+- bash: | # Running gulp to create the apk
+    gulp prod-ios
+  displayName: 'Execute gulp prod-android'
+
+- bash: | # List all the files in the project Directory
+    ls -la
+  displayName: 'ls -la'
+
+- task: InstallAppleCertificate@2
+  inputs:
+    certSecureFile: 'Beta_Certificates_1231.p12'
+    certPwd: $(P12Password)
+    deleteCert: true  
+
+- task: InstallAppleProvisioningProfile@1
+  inputs:
+    provProfileSecureFile: 'Tribute_Beta_Profile.mobileprovision'
+    removeProfile: true
+
+# - task: CocoaPods@0
+#   inputs:
+#     forceRepoUpdate: true
+#     projectDirectory: '$(system.defaultWorkingDirectory)/platforms/ios'
+#   displayName: 'pod install using the CocoaPods task with a forced repo update and a custom project directory'
+
+- task: Xcode@5
+  inputs:
+    actions: 'build'
+    sdk: '$(sdk)'
+    packageApp: true
+    useXcpretty: false
+    configuration: '$(configuration)'
+    scheme: ''
+    signingOption: 'manual'
+    signingIdentity: '$(APPLE_CERTIFICATE_SIGNING_IDENTITY)'
+    provisioningProfileUuid: '$(APPLE_PROV_PROFILE_UUID)'
+    xcWorkspacePath: '$(System.DefaultWorkingDirectory)/platforms/ios/*.xcodeproj'
+    exportPath: '$(agent.buildDirectory)/output/$(sdk)/$(configuration)'
+
+- task: CopyFiles@2
+  inputs:
+    contents: '**/*.ipa'
+    targetFolder: '$(build.artifactStagingDirectory)'
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathToPublish: $(build.artifactStagingDirectory)
+    artifactName: MyBuildOutputs
+
+
+# - task: ArchiveFiles@2
+#   displayName: 'Package .xcarchive into a zip file'
+#   inputs:
+#     rootFolderOrFile: '$(agent.buildDirectory)/CordovaLib.xcarchive/'
+#     archiveFile: '$(build.artifactStagingDirectory)/CordovaLib.xcarchive.zip'
+
+# - task: PublishBuildArtifacts@1
+#   inputs:
+#     pathToPublish: '$(build.artifactStagingDirectory)/CordovaLib.xcarchive.zip'
+#     artifactName: 'xcarchive-files'
+#     artifactType: 'container'
