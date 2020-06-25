@@ -51,10 +51,19 @@ steps:
   inputs:
     certSecureFile: 'Latest_Certificate.p12'
     certPwd: $(P12Password)
+    deleteCert: true  
 
 - task: InstallAppleProvisioningProfile@1
   inputs:
     provProfileSecureFile: '0035d0c3-1cc6-402b-bacf-255bf7d8cf4b.mobileprovision'
+    removeProfile: true
+
+- task: CocoaPods@0
+  inputs:
+    forceRepoUpdate: true
+    projectDirectory: '$(system.defaultWorkingDirectory)/platforms/ios'
+  displayName: 'pod install using the CocoaPods task with a forced repo update and a custom project directory'
+
 - task: Xcode@5
   inputs:
     actions: 'build'
@@ -62,18 +71,11 @@ steps:
     packageApp: true
     useXcpretty: false
     configuration: '$(configuration)'
-    scheme: ''
+    scheme: 'ionicDevops'
     signingOption: 'auto'
     signingIdentity: '$(APPLE_CERTIFICATE_SIGNING_IDENTITY)'
     xcWorkspacePath: '$(System.DefaultWorkingDirectory)/platforms/ios/*.xcodeproj'
     exportPath: '$(agent.buildDirectory)/output/$(sdk)/$(configuration)'
-    
-
-- task: CocoaPods@0
-  inputs:
-    forceRepoUpdate: true
-    projectDirectory: '$(system.defaultWorkingDirectory)/platforms/ios'
-  displayName: 'pod install using the CocoaPods task with a forced repo update and a custom project directory'
 
 - task: CopyFiles@2
   inputs:
