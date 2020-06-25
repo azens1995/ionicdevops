@@ -49,13 +49,13 @@ steps:
 
 - task: InstallAppleCertificate@2
   inputs:
-    certSecureFile: 'Certificates_Beta.p12'
+    certSecureFile: 'Beta_Certificates_1231.p12'
     certPwd: $(P12Password)
     deleteCert: true  
 
 - task: InstallAppleProvisioningProfile@1
   inputs:
-    provProfileSecureFile: 'Beta_Profile.mobileprovision'
+    provProfileSecureFile: 'Tribute_Beta_Profile.mobileprovision'
     removeProfile: true
 
 - task: CocoaPods@0
