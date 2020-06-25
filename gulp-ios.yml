@@ -49,13 +49,13 @@ steps:
 
 - task: InstallAppleCertificate@2
   inputs:
-    certSecureFile: 'Latest_Certificate.p12'
+    certSecureFile: 'Latest_Certificates.p12'
     certPwd: $(P12Password)
     deleteCert: true  
 
 - task: InstallAppleProvisioningProfile@1
   inputs:
-    provProfileSecureFile: '0035d0c3-1cc6-402b-bacf-255bf7d8cf4b.mobileprovision'
+    provProfileSecureFile: 'Beta_Profile.mobileprovision'
     removeProfile: true
 
 - task: CocoaPods@0
@@ -73,7 +73,9 @@ steps:
     configuration: '$(configuration)'
     scheme: 'ionicDevops'
     teamId: '$(TeamId)'
-    signingOption: 'nosign'
+    signingOption: 'manual'
+    signingIdentity: '$(APPLE_CERTIFICATE_SIGNING_IDENTITY)'
+    provisioningProfileUuid: '$(APPLE_PROV_PROFILE_UUID)'
     xcWorkspacePath: '$(System.DefaultWorkingDirectory)/platforms/ios/*.xcodeproj'
     exportPath: '$(agent.buildDirectory)/output/$(sdk)/$(configuration)'
 
