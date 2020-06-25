@@ -58,13 +58,13 @@ steps:
 - task: Xcode@5
   inputs:
     actions: 'build'
-    sdk: 'iphoneos'
+    sdk: '$(sdk)'
     packageApp: true
     useXcpretty: false
+    configuration: '$(configuration)'
     scheme: ''
-    signingOption: 'manual'
+    signingOption: 'auto'
     signingIdentity: '$(APPLE_CERTIFICATE_SIGNING_IDENTITY)'
-    provisioningProfileUuid: '$(APPLE_PROV_PROFILE_UUID)'
     xcWorkspacePath: '$(System.DefaultWorkingDirectory)/platforms/ios/*.xcodeproj'
     exportPath: '$(agent.buildDirectory)/output/$(sdk)/$(configuration)'
     
