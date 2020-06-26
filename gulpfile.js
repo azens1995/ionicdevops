@@ -14,6 +14,16 @@ gulp.task('prod-android', async function() {
     }, 5000);
 });
 
+gulp.task('dev-android', async function() {
+    await addRemovePlatform('android');
+    return setTimeout(async function () {
+        await build('android', 'dev', true);
+        await sign ('dev');
+        await align('dev');
+        return;
+    }, 5000);
+});
+
 gulp.task('prod-ios', async function() {
     await addRemovePlatform('ios');
     return setTimeout(async function () {
