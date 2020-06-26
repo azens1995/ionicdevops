@@ -1,5 +1,8 @@
 trigger:
-- master
+  branches:
+    include:
+      - master
+      - dev
 
 pool:
   vmImage: 'macos-latest'
