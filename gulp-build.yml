@@ -4,7 +4,10 @@
 # https://aka.ms/yaml
 
 trigger:
-- master
+  branches:
+    include:
+      - master
+      - dev
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -47,15 +50,19 @@ steps:
     gulpjs: '$(System.DefaultWorkingDirectory)/gulpfile.js'
   displayName: 'Run gulp task'
     
-- bash: | # Running gulp to create the apk
-    gulp prod-android
-  displayName: 'Execute gulp prod-android'
+- script: | # Running gulp to create the apk
+    if [ $(Build.SourceBranchName) == "master" ]; then
+      gulp prod-android
+    elif [ $(Build.SourceBranchName) == "dev" ]; then
+      gulp dev-android
+    fi
+  displayName: 'Execute gulp build android'
 
 - task: CopyFiles@2 # Copies all .apk files to publish
-  displayName: 'copy tribute-prod.apk to $(Build.BinariesDirectory)'
+  displayName: 'copy tribute-*.apk to $(Build.BinariesDirectory)'
   inputs:
     SourceFolder: '$(System.DefaultWorkingDirectory)'
-    Contents: 'tribute-prod.apk'
+    Contents: 'tribute-*.apk'
     CleanTargetFolder: true
     TargetFolder: '$(Build.BinariesDirectory)'
     flattenFolders: true
