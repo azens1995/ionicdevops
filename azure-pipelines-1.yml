@@ -3,7 +3,7 @@ trigger: ['master']
 pr: none # Disable PR builds entirely
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: 'macOS-latest'
 
 steps:
 # This task trigger a new build to run, this build is the same as the step above that generates the bundle
@@ -32,9 +32,9 @@ steps:
   displayName: 'ionic cordova build android --no-build --release'
 
 # Needed to solve missing dependency problem, see the troubleshooting topic
-- bash: |
-    sudo apt-get install lib32z1
-  displayName: 'sudo apt-get install lib32z1'
+# - bash: |
+#     sudo apt-get install lib32z1
+#   displayName: 'sudo apt-get install lib32z1'
 
 # Signin the .apk file with the specified keystore
 - task: AndroidSigning@3
