@@ -11,7 +11,7 @@ trigger:
 pr: none
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: 'macOS-latest'
 
 steps:
 # This task trigger a new build to run, this build is the same as the step above that generates the bundle
@@ -41,15 +41,19 @@ steps:
     sudo npm install -g @ionic/cli
   displayName: 'npm i -g @ionic/cli'
 
+- bash: | # Install gulp cli
+    sudo npm install --global gulp-cli
+  displayName: 'npm install --global gulp-cli'
+
 # Needed to solve missing dependency problem, see the troubleshooting topic
-- bash: |
-    sudo apt-get install lib32z1
-  displayName: 'sudo apt-get install lib32z1'
-- task: gulp@1
-  inputs:
-    targets: prod-android
-    gulpjs: '$(System.DefaultWorkingDirectory)/gulpfile.js'
-  displayName: 'Run gulp task'
+# - bash: |
+#     sudo apt-get install lib32z1
+#   displayName: 'sudo apt-get install lib32z1'
+# - task: gulp@1
+#   inputs:
+#     targets: prod-android
+#     gulpjs: '$(System.DefaultWorkingDirectory)/gulpfile.js'
+#   displayName: 'Run gulp task'
     
 - script: | # Running gulp to create the apk
     if [ $(Build.SourceBranchName) == "master" ]; then
