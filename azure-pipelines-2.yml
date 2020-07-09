@@ -20,15 +20,16 @@ steps:
     command: install
     workingDir: '$(System.DefaultWorkingDirectory)'
 
-# - task: Npm@1 # Run npm run build
-#   displayName: 'npm run build'
-#   inputs:
-#     command: custom
-#     customCommand: run build
+- task: Npm@1 # Run npm run build
+  displayName: 'npm run build'
+  inputs:
+    command: custom
+    customCommand: run build
 
-# - publish: 'www/' # Publish App artifact
-#   artifact: 'www'
-#   displayName: 'Publishing Artifact'
+- publish: 'www/' # Publish App artifact
+  artifact: 'www'
+  displayName: 'Publishing Artifact'
+  
 - bash: | # List files in directory
     ls -la
 
@@ -43,11 +44,11 @@ steps:
 - bash: | # Install ionic cli
     sudo npm install -g @ionic/cli
   displayName: 'npm i -g @ionic/cli'
-- task: gulp@1
-  inputs:
-    targets: prod-android
-    gulpjs: '$(System.DefaultWorkingDirectory)/gulpfile.js'
-  displayName: 'Run gulp task'
+# - task: gulp@1
+#   inputs:
+#     targets: prod-android
+#     gulpjs: '$(System.DefaultWorkingDirectory)/gulpfile.js'
+#   displayName: 'Run gulp task'
     
 
 # Needed to solve missing dependency problem, see the troubleshooting topic
